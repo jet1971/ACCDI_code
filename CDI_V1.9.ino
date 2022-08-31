@@ -8,7 +8,7 @@
 
 const int triggerPin = 2;
 const int scrGatePin = 7;
-const int ledPin =  13;
+const int ledPin =  12;
 const int potPin = A0;
 
 int sensorValue = 0;
@@ -45,7 +45,7 @@ void setup() {
   Serial.begin(2000000);          // as fast as it goes to prevent blocking
   pinMode(triggerPin, INPUT);    //  pickup coil on bike
   pinMode(scrGatePin, OUTPUT);   // to SCR gate pin
-  //pinMode(ledPin, OUTPUT);       // debug
+  pinMode(ledPin, OUTPUT);       // debug
 
   attachInterrupt(digitalPinToInterrupt(triggerPin), isr, RISING);
   Timer1.initialize(500000);         // initialize timer1, and set a 1 second period
@@ -78,11 +78,11 @@ void loop() {
 
     calcTiming();
   }
-  Serial.print("RPM = ");
-  Serial.print(rpm);
-  Serial.print("  ");
-  Serial.print("Timing Delay = ");
-  Serial.println(timingDelay);
+//  Serial.print("RPM = ");
+//  Serial.print(rpm);
+//  Serial.print("  ");
+//  Serial.print("Timing Delay = ");
+//  Serial.println(timingDelay);
 
 
 }
@@ -91,11 +91,13 @@ void calcTiming() {
   if (rpm <= 1395) {
     useProcessor = false;
     triggerRecievedFlag = 0;
+    digitalWrite(ledPin, LOW);
    
 
   } else {
     useProcessor = true;
     timingDelay = 0;      // no delay = maximum advance
+    digitalWrite(ledPin, HIGH);
   }
 
   getTime = millis();
